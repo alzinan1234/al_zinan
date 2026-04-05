@@ -78,22 +78,23 @@ export const projects = [
 
 export const timeline = [
   {
-    year: '2024 — Present',
-    title: 'Senior Frontend Developer',
-    company: 'Freelance & Contract',
+    year: '2025 — Present',
+    title: 'Jr Frontend Developer',
+    company: 'Sparktech Agency — A, Level-10, Aqua Tower 43, Dhaka 1212',
     desc: 'Building production-grade web applications for international clients. Specializing in React, Next.js, and immersive UI with GSAP and Three.js.',
   },
   {
     year: '2023 — 2024',
-    title: 'Full Stack Developer',
-    company: 'Tech Startup — Dhaka',
-    desc: 'Led frontend architecture for a SaaS platform serving 10,000+ users. Implemented real-time features with WebSocket and optimized performance by 60%.',
+    title: 'Frontend Developer',
+    company: 'Creative IT — Mirpur-10, Dhaka',
+    desc: 'I completed a Web Developer internship at Creative IT Institute, working with React.js and Next.js. I contributed to real-world projects, enhancing my skills in frontend development and gaining valuable industry experience.'
+,
   },
   {
     year: '2022 — 2023',
-    title: 'Frontend Developer',
-    company: 'Web Agency',
-    desc: 'Crafted responsive, pixel-perfect interfaces for 20+ client projects. Mastered Tailwind CSS, Bootstrap, and modern JavaScript patterns.',
+    title: 'Junior Web Developer ',
+    company: 'Programming Hero - Batch 6',
+    desc: 'Completed Web Development Course at Programming Hero (Batch 6).Gained skills in React, JavaScript, and responsive web design.Worked on real-world projects and hands-on practice.',
   },
   {
     year: '2021 — 2022',
@@ -104,11 +105,12 @@ export const timeline = [
 ]
 
 export const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Journey', href: '#experience' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'About',     href: '#about' },
+  { label: 'Skills',    href: '#skills' },
+  { label: 'Projects',  href: '#projects' },
+  { label: 'Education', href: '#education' }, // ← এটা add করো
+  { label: 'Journey',   href: '#journey' },
+  { label: 'Contact',   href: '#contact' },
 ]
 
 export const socials = [

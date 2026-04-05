@@ -3,10 +3,10 @@
 import { FiGithub, FiLinkedin, FiTwitter, FiInstagram } from 'react-icons/fi'
 
 const socials = [
-  { icon: FiGithub, label: 'GitHub', href: 'https://github.com/' },
-  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/' },
-  { icon: FiTwitter, label: 'Twitter', href: 'https://twitter.com/' },
-  { icon: FiInstagram, label: 'Instagram', href: 'https://instagram.com/' },
+  { icon: FiGithub, label: 'GitHub', href: 'https://github.com/alzinan1234' },
+  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/al-zinan-511545355/' },
+  { icon: FiTwitter, label: 'Twitter', href: 'https://twitter.com/alzinan4' },
+  { icon: FiInstagram, label: 'Instagram', href: 'https://www.instagram.com/alzinan4/' },
 ]
 
 export default function Footer() {

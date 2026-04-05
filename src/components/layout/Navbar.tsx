@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { navLinks } from '@/data'
 
 export default function Navbar() {
@@ -29,7 +28,7 @@ export default function Navbar() {
       >
         {/* Logo */}
         <a
-        className=' uppercase'
+          className="uppercase"
           href="#"
           style={{
             fontFamily: 'var(--font-bebas)',

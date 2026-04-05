@@ -1,19 +1,27 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import Image from 'next/image'
 import SectionTag from '@/components/ui/SectionTag'
-import { FiExternalLink, FiGithub, FiArrowRight, FiArrowLeft } from 'react-icons/fi'
+import { FiExternalLink, FiGithub } from 'react-icons/fi'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules'
 
-// ── Update this array with your real screenshot paths & links ──
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/effect-coverflow'
+
+/* ─────────────────────────────────────────
+   Projects Data — add up to 24+ projects
+───────────────────────────────────────── */
 const projects = [
   {
     num: '01',
     name: 'E-Commerce Platform',
     desc: 'Full-stack shopping platform with real-time inventory, WebSocket-powered cart, and seamless payment integration.',
     tags: ['Next.js', 'Node.js', 'MongoDB', 'WebSocket'],
-    // Replace with your real screenshot: '/images/projects/ecommerce.png'
     image: '/e-project.png',
     color: '#1a0a00',
     accent: '#ff6b00',
@@ -23,9 +31,9 @@ const projects = [
   {
     num: '02',
     name: 'HRlynx — AI-powered HR Dashboard',
-    desc: 'Real-time analytics dashboard with beautiful data visualizations, live updates and push notifications for collaborative features.',
+    desc: 'Real-time analytics dashboard with beautiful data visualizations, live updates and push notifications.',
     tags: ['Next.js', 'Framer Motion', 'WebSocket', 'Tailwind CSS'],
-    image: "/hrlynx.png",
+    image: '/hrlynx.png',
     color: '#000d1a',
     accent: '#00b4ff',
     link: 'https://dashboard.hrlynx.ai/',
@@ -33,8 +41,8 @@ const projects = [
   },
   {
     num: '03',
-    name: 'TermSheetGenie FinTech platform',
-    desc: 'TermSheetGenie is a professional FinTech platform designed for venture capital firms and startups to simulate investment scenarios and manage cap tables with precision. It streamlines the investment process by providing real-time data analysis, fund tracking, and clear projections on ownership and dilution.',
+    name: 'TermSheetGenie FinTech',
+    desc: 'Professional FinTech platform for venture capital firms to simulate investment scenarios and manage cap tables.',
     tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     image: '/trem-sheet.png',
     color: '#0a001a',
@@ -45,7 +53,7 @@ const projects = [
   {
     num: '04',
     name: 'Nike Adapt 2.0',
-    desc: 's premium footwear collection with a focus on a "pixel-perfect" visual experience. It features dynamic hero sections, vibrant product grids, and interactive story cards to provide an engaging and seamless shopping journey',
+    desc: 'Premium footwear collection with pixel-perfect visuals, dynamic hero sections, and interactive story cards.',
     tags: ['Next.js', 'Redux', 'Tailwind CSS', 'Framer Motion'],
     image: '/nike.png',
     color: '#001a0a',
@@ -56,7 +64,7 @@ const projects = [
   {
     num: '05',
     name: 'Lawapan Truck',
-    desc: 'Lawapan Truck is a comprehensive logistics and shipping platform designed to streamline regional transport across West Africa. It connects businesses with verified transporters, offering a seamless process for booking trucks and monitoring shipments in real-time.',
+    desc: 'Comprehensive logistics platform connecting businesses with verified transporters for real-time shipment monitoring.',
     tags: ['Next.js', 'WebSocket', 'Tailwind CSS', 'JavaScript'],
     image: '/lawapan.png',
     color: '#1a001a',
@@ -67,7 +75,7 @@ const projects = [
   {
     num: '06',
     name: 'ScoutLink MENA',
-    desc: 'ScoutLink MENA is a robust, data-driven administrative dashboard designed for managing a high-traffic talent scouting or media platform. It features a dark-themed, "pixel-perfect" UI that provides real-time analytics, video moderation tools, and user growth tracking to streamline platform operations.',
+    desc: 'Data-driven admin dashboard for talent scouting with real-time analytics, video moderation and user growth tracking.',
     tags: ['Next.js', 'GSAP', 'React.js'],
     image: '/south-link.png',
     color: '#001a1a',
@@ -75,13 +83,101 @@ const projects = [
     link: 'https://scout-link.vercel.app/admin',
     github: 'https://github.com/alzinan1234/ScoutLink',
   },
+  // ── Add more projects below — copy & paste the block ──
+  // {
+  //   num: '07',
+  //   name: 'Project Name',
+  //   desc: 'Short description of the project.',
+  //   tags: ['Tag1', 'Tag2'],
+  //   image: '/images/project7.png',
+  //   color: '#0a0a1a',
+  //   accent: '#ff0080',
+  //   link: 'https://your-live-link.com',
+  //   github: 'https://github.com/your-repo',
+  // },
 ]
 
-export default function Projects() {
-  const [active, setActive]     = useState(0)
-  const [prev, setPrev]         = useState<number | null>(null)
-  const [animating, setAnimating] = useState(false)
+/* ─────────────────────────────────────────
+   Project Card — used inside SwiperSlide
+───────────────────────────────────────── */
+function ProjectCard({ p }: { p: (typeof projects)[0] }) {
+  return (
+    <div className="proj-card">
+      {/* ── Image ── */}
+      <div className="proj-card-img" style={{ background: p.color }}>
+        {p.image && (
+          <Image
+            src={p.image}
+            alt={p.name}
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'top' }}
+            sizes="(max-width: 768px) 100vw, 400px"
+          />
+        )}
+        {/* overlay */}
+        <div className="proj-card-overlay" />
+        {/* accent glow */}
+        <div className="proj-card-accent" style={{ background: p.accent }} />
+        {/* num watermark */}
+        <div className="proj-card-num">{p.num}</div>
+        {/* hover links */}
+        <div className="proj-card-links">
+          <a
+            href={p.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="proj-icon-btn"
+            onClick={e => e.stopPropagation()}
+          >
+            <FiExternalLink size={16} />
+          </a>
+          <a
+            href={p.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="proj-icon-btn"
+            onClick={e => e.stopPropagation()}
+          >
+            <FiGithub size={16} />
+          </a>
+        </div>
+      </div>
 
+      {/* ── Info ── */}
+      <div className="proj-card-info">
+        {/* accent line */}
+        <div className="proj-card-info-accent" style={{ background: p.accent }} />
+
+        <h3 className="proj-card-title">{p.name}</h3>
+        <p className="proj-card-desc">{p.desc}</p>
+
+        {/* tags */}
+        <div className="proj-card-tags">
+          {p.tags.map(t => (
+            <span key={t} className="proj-tag" style={{ borderColor: p.accent + '44', color: p.accent }}>
+              {t}
+            </span>
+          ))}
+        </div>
+
+        {/* bottom row */}
+        <div className="proj-card-bottom">
+          <a href={p.link} target="_blank" rel="noopener noreferrer" className="proj-live-btn">
+            <FiExternalLink size={12} /> Live
+          </a>
+          <a href={p.github} target="_blank" rel="noopener noreferrer" className="proj-github-btn">
+            <FiGithub size={12} /> Code
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─────────────────────────────────────────
+   Main Section
+───────────────────────────────────────── */
+export default function Projects() {
   const sectionRef   = useRef<HTMLElement>(null)
   const scanlineRef  = useRef<HTMLDivElement>(null)
   const glitchBarRef = useRef<HTMLDivElement>(null)
@@ -90,45 +186,16 @@ export default function Projects() {
   const workRef      = useRef<HTMLSpanElement>(null)
   const tagRef       = useRef<HTMLDivElement>(null)
   const contentRef   = useRef<HTMLDivElement>(null)
-  const imageRef     = useRef<HTMLDivElement>(null)
-  const infoRef      = useRef<HTMLDivElement>(null)
 
-  // slide to next/prev
-  const goTo = (idx: number) => {
-    if (animating || idx === active) return
-    setAnimating(true)
-    setPrev(active)
-
-    // animate out current image + info
-    if (imageRef.current && infoRef.current) {
-      gsap.timeline()
-        .to(imageRef.current, { x: -40, opacity: 0, duration: 0.3, ease: 'power2.in' })
-        .to(infoRef.current,  { x: -20, opacity: 0, duration: 0.25, ease: 'power2.in' }, '<')
-        .call(() => {
-          setActive(idx)
-          setPrev(null)
-        })
-        .set(imageRef.current, { x: 60 })
-        .set(infoRef.current,  { x: 30 })
-        .to(imageRef.current, { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' })
-        .to(infoRef.current,  { x: 0, opacity: 1, duration: 0.45, ease: 'power3.out' }, '-=0.35')
-        .call(() => setAnimating(false))
-    }
-  }
-
-  const next = () => goTo((active + 1) % projects.length)
-  const prev_ = () => goTo((active - 1 + projects.length) % projects.length)
-
-  // ── same GSAP pattern as Hero ──
   useEffect(() => {
     gsap.set([selectedRef.current, workRef.current], { y: '110%' })
     gsap.set([tagRef.current, contentRef.current], { opacity: 0, y: 28 })
 
-    const tl = gsap.timeline()
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return
       observer.disconnect()
-      tl.to(tagRef.current,      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+      gsap.timeline()
+        .to(tagRef.current,      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
         .to(selectedRef.current, { y: '0%',          duration: 1.1, ease: 'power4.out' }, '-=0.3')
         .to(workRef.current,     { y: '0%',          duration: 1.1, ease: 'power4.out' }, '-=0.75')
         .to(contentRef.current,  { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4')
@@ -167,41 +234,19 @@ export default function Projects() {
         gsap.fromTo(scanlineRef.current, { y: '-2px' }, { y: '100%', duration: 3.5, ease: 'none', repeat: -1, delay: 0.5 })
       }
 
-      return () => { clearInterval(shakeInterval); clearInterval(glitchInterval); observer.disconnect() }
+      return () => {
+        clearInterval(shakeInterval)
+        clearInterval(glitchInterval)
+        observer.disconnect()
+      }
     }
     return () => observer.disconnect()
   }, [])
 
-  // ── Autoplay effect ──
-  useEffect(() => {
-    const autoplayTimer = setInterval(() => {
-      goTo((active + 1) % projects.length)
-    }, 5000)
-
-    return () => clearInterval(autoplayTimer)
-  }, [active, animating])
-
-  const p = projects[active]
-
   return (
     <>
       <style>{`
-        .proj-selected { display:block; color:#fff; animation: alFlicker 8s infinite; }
-        @keyframes alFlicker {
-          0%,94%,100%{opacity:1;} 95%{opacity:0.5;} 95.4%{opacity:1;} 95.8%{opacity:0.2;} 96.2%{opacity:1;}
-        }
-        .proj-work {
-          position:relative; display:block;
-          -webkit-text-stroke:1px rgba(255,255,255,0.2); color:transparent;
-        }
-        .proj-work::before,.proj-work::after {
-          content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; -webkit-text-stroke:0;
-        }
-        .proj-work::before { color:rgba(255,30,80,0.8); animation:rgbLeft 7s infinite; clip-path:polygon(0 10%,100% 10%,100% 38%,0 38%); }
-        .proj-work::after  { color:rgba(0,210,255,0.8); animation:rgbRight 7s infinite; clip-path:polygon(0 58%,100% 58%,100% 82%,0 82%); }
-        @keyframes rgbLeft  { 0%,85%,100%{transform:none;opacity:0;} 86%{transform:translateX(-8px) skewX(-3deg);opacity:1;} 88%{transform:translateX(4px);opacity:0.7;} 90%{transform:translateX(-3px);opacity:1;} 92%{transform:none;opacity:0;} }
-        @keyframes rgbRight { 0%,87%,100%{transform:none;opacity:0;} 88%{transform:translateX(8px) skewX(3deg);opacity:1;} 90%{transform:translateX(-5px);opacity:0.7;} 92%{transform:translateX(2px);opacity:1;} 94%{transform:none;opacity:0;} }
-
+        /* ── Section decorative ── */
         .proj-scanline   { position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.06) 40%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0.06) 60%,transparent);pointer-events:none;z-index:5; }
         .proj-glitch-bar { position:absolute;left:-10%;width:120%;height:12px;pointer-events:none;z-index:6;opacity:0;mix-blend-mode:screen;top:0; }
         .proj-corner     { position:absolute;width:32px;height:32px;pointer-events:none;z-index:4; }
@@ -209,90 +254,195 @@ export default function Projects() {
         .proj-corner.br  { bottom:40px;right:60px;border-bottom:1px solid rgba(255,255,255,0.15);border-right:1px solid rgba(255,255,255,0.15); }
         .proj-line       { display:block;overflow:hidden; }
 
-        /* ── Image panel ── */
-        .proj-image-panel {
-          position:relative; width:100%; aspect-ratio:16/10;
-          overflow:hidden; border:1px solid rgba(255,255,255,0.08);
+        /* ── Heading animations — identical to original ── */
+        .proj-selected { display:block;color:#fff;animation:alFlicker 8s infinite; }
+        @keyframes alFlicker { 0%,94%,100%{opacity:1;} 95%{opacity:0.5;} 95.4%{opacity:1;} 95.8%{opacity:0.2;} 96.2%{opacity:1;} }
+        .proj-work { position:relative;display:block;-webkit-text-stroke:1px rgba(255,255,255,0.2);color:transparent; }
+        .proj-work::before,.proj-work::after { content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;-webkit-text-stroke:0; }
+        .proj-work::before { color:rgba(255,30,80,0.8);animation:rgbLeft 7s infinite;clip-path:polygon(0 10%,100% 10%,100% 38%,0 38%); }
+        .proj-work::after  { color:rgba(0,210,255,0.8);animation:rgbRight 7s infinite;clip-path:polygon(0 58%,100% 58%,100% 82%,0 82%); }
+        @keyframes rgbLeft  { 0%,85%,100%{transform:none;opacity:0;} 86%{transform:translateX(-8px) skewX(-3deg);opacity:1;} 88%{transform:translateX(4px);opacity:0.7;} 90%{transform:translateX(-3px);opacity:1;} 92%{transform:none;opacity:0;} }
+        @keyframes rgbRight { 0%,87%,100%{transform:none;opacity:0;} 88%{transform:translateX(8px) skewX(3deg);opacity:1;} 90%{transform:translateX(-5px);opacity:0.7;} 92%{transform:translateX(2px);opacity:1;} 94%{transform:none;opacity:0;} }
+
+        /* ── Swiper custom styles ── */
+        .proj-swiper {
+          width: 100%;
+          padding: 20px 0 60px !important;
         }
-        .proj-image-panel .img-overlay {
-          position:absolute;inset:0;z-index:2;
-          background:linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%);
+        .proj-swiper .swiper-slide {
+          height: auto;
+          transition: transform 0.4s ease, opacity 0.4s ease;
         }
-        .proj-image-panel .img-num {
-          position:absolute;bottom:16px;left:20px;z-index:3;
-          font-family:var(--font-bebas);font-size:80px;line-height:1;
-          color:rgba(255,255,255,0.06);pointer-events:none;user-select:none;
-        }
-        /* placeholder when no image */
-        .proj-image-panel .img-placeholder {
-          position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
-        }
-        .proj-image-panel .img-placeholder p {
-          font-family:var(--font-mono);font-size:10px;letter-spacing:3px;
-          color:rgba(255,255,255,0.2);text-transform:uppercase;
-        }
-        /* accent glow bar at bottom of image */
-        .proj-image-panel .img-accent {
-          position:absolute;bottom:0;left:0;right:0;height:2px;z-index:4;
-          transition:background 0.5s;
+        .proj-swiper .swiper-slide:not(.swiper-slide-active) {
+          opacity: 0.55;
         }
 
-        /* ── Tag pills ── */
+        /* custom pagination */
+        .proj-swiper .swiper-pagination {
+          bottom: 8px !important;
+        }
+        .proj-swiper .swiper-pagination-bullet {
+          width: 6px; height: 6px;
+          background: rgba(255,255,255,0.25);
+          border-radius: 0;
+          opacity: 1;
+          transition: width 0.3s, background 0.3s;
+        }
+        .proj-swiper .swiper-pagination-bullet-active {
+          width: 24px;
+          background: #fff;
+          border-radius: 0;
+        }
+
+        /* custom nav arrows */
+        .proj-swiper .swiper-button-prev,
+        .proj-swiper .swiper-button-next {
+          width: 48px; height: 48px;
+          border: 1px solid rgba(255,255,255,0.2);
+          background: rgba(0,0,0,0.6);
+          backdrop-filter: blur(8px);
+          color: #fff !important;
+          transition: background 0.3s, border-color 0.3s;
+          top: 38%;
+        }
+        .proj-swiper .swiper-button-prev:hover,
+        .proj-swiper .swiper-button-next:hover {
+          background: rgba(255,255,255,0.1);
+          border-color: rgba(255,255,255,0.5);
+        }
+        .proj-swiper .swiper-button-prev::after,
+        .proj-swiper .swiper-button-next::after {
+          font-size: 14px !important;
+          font-weight: 700;
+        }
+
+        /* ── Project Card ── */
+        .proj-card {
+          border: 1px solid rgba(255,255,255,0.07);
+          background: rgba(255,255,255,0.015);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          transition: border-color 0.35s, transform 0.35s;
+          height: 100%;
+        }
+        .proj-card:hover {
+          border-color: rgba(255,255,255,0.18);
+          transform: translateY(-6px);
+        }
+
+        /* image container */
+        .proj-card-img {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 16/10;
+          overflow: hidden;
+        }
+        .proj-card-overlay {
+          position: absolute; inset: 0; z-index: 2;
+          background: linear-gradient(to bottom, transparent 45%, rgba(0,0,0,0.92) 100%);
+          transition: opacity 0.3s;
+        }
+        .proj-card:hover .proj-card-overlay { opacity: 0.7; }
+        .proj-card-accent {
+          position: absolute; bottom: 0; left: 0; right: 0;
+          height: 2px; z-index: 4;
+        }
+        .proj-card-num {
+          position: absolute; bottom: 10px; left: 16px; z-index: 3;
+          font-family: var(--font-bebas); font-size: 64px; line-height: 1;
+          color: rgba(255,255,255,0.06); pointer-events: none; user-select: none;
+        }
+        /* hover links over image */
+        .proj-card-links {
+          position: absolute; inset: 0; z-index: 5;
+          display: flex; align-items: center; justify-content: center; gap: 12px;
+          opacity: 0; transition: opacity 0.3s;
+        }
+        .proj-card:hover .proj-card-links { opacity: 1; }
+        .proj-icon-btn {
+          width: 42px; height: 42px;
+          border: 1px solid rgba(255,255,255,0.3);
+          background: rgba(0,0,0,0.7);
+          backdrop-filter: blur(8px);
+          display: flex; align-items: center; justify-content: center;
+          color: #fff; text-decoration: none;
+          transition: background 0.2s, border-color 0.2s, transform 0.2s;
+        }
+        .proj-icon-btn:hover {
+          background: rgba(255,255,255,0.15);
+          border-color: #fff;
+          transform: scale(1.1);
+        }
+
+        /* info area */
+        .proj-card-info {
+          padding: 20px 20px 18px;
+          display: flex; flex-direction: column; gap: 10px;
+          flex: 1; position: relative;
+        }
+        .proj-card-info-accent {
+          position: absolute; top: 0; left: 0;
+          width: 40px; height: 2px; opacity: 0.8;
+        }
+        .proj-card-title {
+          font-family: var(--font-bebas);
+          font-size: clamp(20px, 2.2vw, 26px);
+          line-height: 1.1; color: #fff; letter-spacing: 0.5px;
+          margin: 0;
+        }
+        .proj-card-desc {
+          font-size: 12px; line-height: 1.75;
+          color: rgba(255,255,255,0.4);
+          margin: 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .proj-card-tags {
+          display: flex; flex-wrap: wrap; gap: 6px;
+        }
         .proj-tag {
-          font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
-          padding:4px 12px;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.35);
-          transition:border-color 0.3s,color 0.3s;
+          font-family: var(--font-mono); font-size: 8px;
+          letter-spacing: 2px; text-transform: uppercase;
+          border: 1px solid; padding: 3px 8px;
         }
-        .proj-tag:hover { border-color:rgba(255,255,255,0.35);color:rgba(255,255,255,0.8); }
+        .proj-card-bottom {
+          display: flex; gap: 10px; margin-top: auto; padding-top: 4px;
+        }
+        .proj-live-btn, .proj-github-btn {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 2px; text-transform: uppercase;
+          text-decoration: none; padding: 8px 16px;
+          transition: all 0.3s; border: 1px solid;
+        }
+        .proj-live-btn {
+          background: #fff; color: #000; border-color: #fff;
+        }
+        .proj-live-btn:hover { background: rgba(255,255,255,0.85); transform: translateY(-2px); }
+        .proj-github-btn {
+          background: transparent; color: rgba(255,255,255,0.7);
+          border-color: rgba(255,255,255,0.2);
+        }
+        .proj-github-btn:hover {
+          border-color: rgba(255,255,255,0.6);
+          color: #fff; transform: translateY(-2px);
+        }
 
-        /* ── Nav buttons ── */
-        .proj-nav-btn {
-          width:48px;height:48px;border:1px solid rgba(255,255,255,0.15);
-          display:flex;align-items:center;justify-content:center;
-          background:transparent;cursor:none;
-          transition:background 0.3s,border-color 0.3s,transform 0.2s;color:#fff;
+        /* ── Counter ── */
+        .proj-counter {
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 3px; color: rgba(255,255,255,0.2);
+          text-transform: uppercase; margin-bottom: 8px;
         }
-        .proj-nav-btn:hover { background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.4);transform:scale(1.05); }
-        .proj-nav-btn:disabled { opacity:0.3;pointer-events:none; }
 
-        /* ── Dot indicators ── */
-        .proj-dot {
-          height:2px;background:rgba(255,255,255,0.2);cursor:none;
-          transition:background 0.3s,width 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
-        }
-        .proj-dot.active { background:#fff; }
-
-        /* ── Link buttons ── */
-        .proj-link-btn {
-          display:inline-flex;align-items:center;gap:8px;
-          font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
-          padding:12px 24px;text-decoration:none;
-          transition:all 0.3s;position:relative;overflow:hidden;
-        }
-        .proj-link-btn.primary { background:#fff;color:#000; }
-        .proj-link-btn.primary:hover { background:rgba(255,255,255,0.88);transform:translateY(-2px); }
-        .proj-link-btn.outline { border:1px solid rgba(255,255,255,0.25);color:#fff; }
-        .proj-link-btn.outline:hover { border-color:#fff;transform:translateY(-2px); }
-        .proj-link-btn::after {
-          content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-          background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
-          transition:left 0.5s ease;pointer-events:none;
-        }
-        .proj-link-btn:hover::after { left:150%; }
-
-        /* ── Thumbnail strip ── */
-        .proj-thumb {
-          width:60px;height:40px;border:1px solid rgba(255,255,255,0.08);
-          overflow:hidden;cursor:none;flex-shrink:0;
-          transition:border-color 0.3s,transform 0.2s,opacity 0.3s;
-          position:relative;opacity:0.45;
-        }
-        .proj-thumb:hover { opacity:0.75;transform:scale(1.05); }
-        .proj-thumb.active-thumb { border-color:rgba(255,255,255,0.5);opacity:1; }
-
-        @media(max-width:768px){
-          .proj-corner.tl{left:24px;} .proj-corner.br{right:24px;}
-          .proj-layout{grid-template-columns:1fr!important;}
+        @media(max-width:640px){
+          .proj-corner.tl { left: 24px; }
+          .proj-corner.br { right: 24px; }
+          .proj-swiper .swiper-button-prev,
+          .proj-swiper .swiper-button-next { display: none; }
         }
       `}</style>
 
@@ -300,148 +450,68 @@ export default function Projects() {
         id="projects"
         ref={sectionRef}
         className="px-6 md:px-[60px] py-28 md:py-[120px] bg-[#050505]"
-        style={{ position:'relative', overflow:'hidden' }}
+        style={{ position: 'relative', overflow: 'hidden' }}
       >
         <div ref={scanlineRef} className="proj-scanline" />
         <div ref={glitchBarRef} className="proj-glitch-bar" />
         <div className="proj-corner tl" />
         <div className="proj-corner br" />
 
-        {/* tag */}
+        {/* ── Tag ── */}
         <div ref={tagRef}><SectionTag label="Portfolio" /></div>
 
-        {/* heading */}
+        {/* ── Heading — identical to original ── */}
         <h2
           ref={headingRef}
-          style={{ fontFamily:'var(--font-bebas)', fontSize:'clamp(52px,7vw,100px)', lineHeight:1, letterSpacing:'-1px', marginBottom:'48px', willChange:'transform' }}
+          style={{
+            fontFamily: 'var(--font-bebas)',
+            fontSize: 'clamp(52px,7vw,100px)',
+            lineHeight: 1,
+            letterSpacing: '-1px',
+            marginBottom: '12px',
+            willChange: 'transform',
+          }}
         >
           <span className="proj-line"><span ref={selectedRef} className="proj-selected">SELECTED</span></span>
           <span className="proj-line"><span ref={workRef} className="proj-work" data-text="WORK">WORK</span></span>
         </h2>
 
-        {/* ── MAIN CONTENT ── */}
-        <div ref={contentRef}>
+        {/* counter */}
+        <p className="proj-counter">{String(projects.length).padStart(2,'0')} Projects</p>
 
-          {/* Layout: image left, info right */}
-          <div
-            className="proj-layout grid gap-8 md:gap-12 items-start"
-            style={{ gridTemplateColumns: '1fr 1fr' }}
+        {/* ── Swiper Content ── */}
+        <div ref={contentRef} style={{ opacity: 0 }}>
+          <Swiper
+            className="proj-swiper"
+            modules={[Navigation, Pagination, Autoplay, EffectCoverflow]}
+            effect="coverflow"
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 120,
+              modifier: 1.5,
+              slideShadows: false,
+            }}
+            slidesPerView={1}
+            centeredSlides={true}
+            spaceBetween={24}
+            navigation
+            pagination={{ clickable: true, dynamicBullets: true }}
+            autoplay={{ delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true }}
+            loop={true}
+            breakpoints={{
+              640:  { slidesPerView: 1.2, spaceBetween: 20 },
+              768:  { slidesPerView: 2,   spaceBetween: 24 },
+              1024: { slidesPerView: 2.5, spaceBetween: 28 },
+              1280: { slidesPerView: 3,   spaceBetween: 28 },
+            }}
           >
-
-            {/* ── LEFT: Image panel ── */}
-            <div ref={imageRef} className="proj-image-panel" style={{ background: p.color }}>
-              {p.image ? (
-                <Image
-                  src={p.image}
-                  alt={p.name}
-                  fill
-                  style={{ objectFit:'cover', objectPosition:'top' }}
-                  sizes="(max-width:768px) 100vw, 50vw"
-                />
-              ) : (
-                /* Placeholder — remove once you add real images */
-                <div className="img-placeholder" style={{ background: p.color }}>
-                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" style={{ opacity:0.12 }}>
-                    <rect x="8" y="14" width="48" height="36" rx="2" stroke="white" strokeWidth="1.5"/>
-                    <circle cx="22" cy="26" r="5" stroke="white" strokeWidth="1.5"/>
-                    <path d="M8 40l14-10 10 8 8-6 14 10" stroke="white" strokeWidth="1.5"/>
-                  </svg>
-                  <p>Add screenshot here</p>
-                  <p style={{ fontSize:8, opacity:0.5 }}>projects[{active}].image = &apos;/images/projects/...&apos;</p>
-                </div>
-              )}
-
-              <div className="img-overlay" />
-              <div className="img-num">{p.num}</div>
-              <div className="img-accent" style={{ background: p.accent }} />
-            </div>
-
-            {/* ── RIGHT: Info panel ── */}
-            <div ref={infoRef} style={{ display:'flex', flexDirection:'column', gap:24 }}>
-
-              {/* counter */}
-              <div style={{ fontFamily:'var(--font-mono)', fontSize:10, letterSpacing:3, color:'rgba(255,255,255,0.25)', textTransform:'uppercase' }}>
-                {String(active + 1).padStart(2,'0')} / {String(projects.length).padStart(2,'0')}
-              </div>
-
-              {/* name */}
-              <div style={{ fontFamily:'var(--font-bebas)', fontSize:'clamp(32px,3.5vw,52px)', lineHeight:1, letterSpacing:1, color:'#fff' }}>
-                {p.name}
-              </div>
-
-              {/* accent line */}
-              <div style={{ width:40, height:1, background: p.accent }} />
-
-              {/* desc */}
-              <p style={{ fontSize:14, lineHeight:1.8, color:'rgba(255,255,255,0.45)', maxWidth:440 }}>
-                {p.desc}
-              </p>
-
-              {/* tags */}
-              <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
-                {p.tags.map(tag => (
-                  <span key={tag} className="proj-tag">{tag}</span>
-                ))}
-              </div>
-
-              {/* links */}
-              <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
-                <a href={p.link} className="proj-link-btn primary" target="_blank" rel="noopener noreferrer">
-                  <FiExternalLink size={13} /> Live Preview
-                </a>
-                <a href={p.github} className="proj-link-btn outline" target="_blank" rel="noopener noreferrer">
-                  <FiGithub size={13} /> View Code
-                </a>
-              </div>
-
-              {/* ── Nav controls ── */}
-              <div style={{ display:'flex', alignItems:'center', gap:16, marginTop:8 }}>
-                <button className="proj-nav-btn" onClick={prev_} aria-label="Previous">
-                  <FiArrowLeft size={18} />
-                </button>
-                <button className="proj-nav-btn" onClick={next} aria-label="Next">
-                  <FiArrowRight size={18} />
-                </button>
-
-                {/* dot indicators */}
-                <div style={{ display:'flex', gap:6, alignItems:'center', flex:1 }}>
-                  {projects.map((_, i) => (
-                    <button
-                      key={i}
-                      className={`proj-dot ${i === active ? 'active' : ''}`}
-                      style={{ width: i === active ? 24 : 12, border:'none', padding:0, cursor:'none' }}
-                      onClick={() => goTo(i)}
-                      aria-label={`Go to project ${i + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ── THUMBNAIL STRIP ── */}
-          <div style={{ display:'flex', gap:8, marginTop:32, alignItems:'center' }}>
-            <span style={{ fontFamily:'var(--font-mono)', fontSize:9, letterSpacing:2, color:'rgba(255,255,255,0.2)', textTransform:'uppercase', marginRight:8, whiteSpace:'nowrap' }}>
-              All Projects
-            </span>
-            {projects.map((proj, i) => (
-              <button
-                key={i}
-                className={`proj-thumb ${i === active ? 'active-thumb' : ''}`}
-                onClick={() => goTo(i)}
-                aria-label={proj.name}
-                style={{ background: proj.color }}
-              >
-                {proj.image ? (
-                  <Image src={proj.image} alt={proj.name} fill style={{ objectFit:'cover', objectPosition:'top' }} sizes="60px" />
-                ) : (
-                  <div style={{ width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    <div style={{ width:2, height:2, background: proj.accent, borderRadius:'50%', boxShadow:`0 0 6px ${proj.accent}` }} />
-                  </div>
-                )}
-              </button>
+            {projects.map((p, i) => (
+              <SwiperSlide key={i} style={{ height: 'auto' }}>
+                <ProjectCard p={p} />
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         </div>
       </section>
     </>

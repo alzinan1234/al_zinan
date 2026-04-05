@@ -350,7 +350,7 @@ export default function About() {
               >
                 I&apos;m{' '}
                 <strong style={{ color: '#fff', fontWeight: 500 }}>Al Zinan</strong>, a passionate{' '}
-                <strong style={{ color: '#fff', fontWeight: 500 }}>Full Stack Web Developer</strong>{' '}
+                <strong style={{ color: '#fff', fontWeight: 500 }}> Web Developer</strong>{' '}
                 based in Dhaka, Bangladesh. With{' '}
                 <strong style={{ color: '#fff', fontWeight: 500 }}>3–4 years</strong> of hands-on
                 experience, I build scalable, performant, and visually stunning web applications.
@@ -364,11 +364,9 @@ export default function About() {
                   fontWeight: 300,
                 }}
               >
-                From pixel-perfect frontends with React &amp; Next.js to robust backends with
-                Node.js &amp; MongoDB — I bring complete digital products to life. I&apos;m also
-                deeply passionate about{' '}
-                <strong style={{ color: '#fff', fontWeight: 500 }}>UI/UX design</strong>, using
-                Figma to design before I code.
+                From pixel-perfect frontends with React &amp; Next.js 
+               &amp;  I bring complete digital products to life. 
+               
               </p>
             </div>
 

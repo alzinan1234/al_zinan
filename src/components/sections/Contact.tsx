@@ -6,8 +6,8 @@ import SectionTag from '@/components/ui/SectionTag'
 import { FiMail, FiMapPin, FiBriefcase, FiSend } from 'react-icons/fi'
 
 const contactInfo = [
-  { icon: FiMail,      label: 'Email',        value: 'alzinan@gmail.com' },
-  { icon: FiMapPin,    label: 'Location',     value: 'Dhaka, Bangladesh' },
+  { icon: FiMail,      label: 'Email',        value: 'alzinan314@gmail.com' },
+  { icon: FiMapPin,    label: 'Location',     value: 'Mohakhali, Dhaka, Bangladesh' },
   { icon: FiBriefcase, label: 'Availability', value: 'Open to Freelance & Full-time' },
 ]
 
