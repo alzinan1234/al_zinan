@@ -66,7 +66,7 @@ export default function Hero() {
       window.addEventListener('mousemove', onMouse)
 
       const animate = () => {
-        
+
         animId = requestAnimationFrame(animate)
         particles.rotation.y += 0.0008
         particles.rotation.x += 0.0002
@@ -123,6 +123,7 @@ export default function Hero() {
     }
 
     // ── Subtle idle vibration on hero name ──
+    let shakeInterval: NodeJS.Timeout
     tl.call(() => {
       if (!heroNameRef.current) return
       gsap.to(heroNameRef.current, {
@@ -146,8 +147,7 @@ export default function Hero() {
           .to(heroNameRef.current, { x: 0, duration: 0.04, ease: 'none' })
       }
 
-      const shakeInterval = setInterval(shakeBurst, 5000)
-      return () => clearInterval(shakeInterval)
+      shakeInterval = setInterval(shakeBurst, 5000)
     }, [], '+=0.3')
 
     // ── Glitch bar flash ──
@@ -192,7 +192,10 @@ export default function Hero() {
     }
     setTimeout(typeRole, 2200)
 
-    return () => clearInterval(glitchInterval)
+    return () => {
+      if (shakeInterval) clearInterval(shakeInterval)
+      clearInterval(glitchInterval)
+    }
   }, [])
 
   return (
