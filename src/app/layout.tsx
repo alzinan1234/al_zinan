@@ -3,8 +3,8 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Al Zinan — Web Developer',
-  description: 'Full Stack Web Developer from Dhaka, Bangladesh. Specializing in React, Next.js, Node.js, and modern web technologies.',
-  keywords: ['Al Zinan', 'Full Stack Developer', 'React', 'Next.js', 'Web Developer', 'Dhaka', 'Bangladesh'],
+  description: 'Web Developer from Dhaka, Bangladesh. Specializing in React, Next.js, Node.js, and modern web technologies.',
+  keywords: ['Al Zinan', 'Web Developer', 'React', 'Next.js', 'Web Developer', 'Dhaka', 'Bangladesh'],
   authors: [{ name: 'Al Zinan' }],
   openGraph: {
     title: 'Al Zinan — Web Developer',
