@@ -371,7 +371,7 @@ export default function Contact() {
                   Your Name
                 </label>
                 <input
-                  name="name" type="text" placeholder="John Doe"
+                  name="name" type="text" placeholder="Al Zinan"
                   value={form.name} onChange={handleChange}
                   style={inputStyle} required
                   onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)')}
@@ -389,7 +389,7 @@ export default function Contact() {
                   Email Address
                 </label>
                 <input
-                  name="email" type="email" placeholder="john@example.com"
+                  name="email" type="email" placeholder="alzinan314@gmail.com"
                   value={form.email} onChange={handleChange}
                   style={inputStyle} required
                   onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)')}
