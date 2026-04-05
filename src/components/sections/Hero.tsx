@@ -58,12 +58,15 @@ export default function Hero() {
 
       let mx = 0, my = 0
       const onMouse = (e: MouseEvent) => {
+
         mx = (e.clientX / window.innerWidth - 0.5) * 2
         my = (e.clientY / window.innerHeight - 0.5) * 2
+
       }
       window.addEventListener('mousemove', onMouse)
 
       const animate = () => {
+        
         animId = requestAnimationFrame(animate)
         particles.rotation.y += 0.0008
         particles.rotation.x += 0.0002
