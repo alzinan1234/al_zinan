@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --font-bebas: 'Bebas Neue', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-inter: 'Inter', sans-serif;
+  --border: rgba(255, 255, 255, 0.08);
+  --glow: rgba(255, 255, 255, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #fff; }
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+/* ── CURSOR ── */
+#cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+
+#cursor-follower {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: all 0.18s ease;
+  mix-blend-mode: difference;
+}
+
+/* ── GLITCH ── */
+.glitch {
+  position: relative;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.glitch::before {
+  color: #fff;
+  animation: glitch1 8s infinite;
+  clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+}
+.glitch::after {
+  color: #fff;
+  animation: glitch2 8s infinite;
+  clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+}
+
+/* ── SWIPER CUSTOM ── */
+.projectSwiper {
+  padding-bottom: 60px !important;
+}
+.swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.2) !important;
+  width: 4px !important;
+  height: 4px !important;
+}
+.swiper-pagination-bullet-active {
+  background: #fff !important;
+  width: 20px !important;
+  border-radius: 2px !important;
+}
+.swiper-button-prev,
+.swiper-button-next {
+  width: 48px !important;
+  height: 48px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: #fff !important;
+  top: auto !important;
+  bottom: 0 !important;
+}
+.swiper-button-prev {
+  right: 60px !important;
+  left: auto !important;
+}
+.swiper-button-next {
+  right: 0 !important;
+}
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 12px !important;
+}
+
+/* ── EXP BAR ── */
+.exp-fill {
+  height: 1px;
+  background: #fff;
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ── MOBILE MENU ── */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+/* ── HERO LINE OVERFLOW ── */
+.hero-line-wrap {
+  overflow: hidden;
+  line-height: 0.9;
+}
+
+/* ── LOADER ── */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── AOS OVERRIDE ── */
+[data-aos] {
+  pointer-events: none;
+}
+[data-aos].aos-animate {
+  pointer-events: auto;
+}
